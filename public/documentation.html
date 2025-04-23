@@ -70,13 +70,17 @@
     <h2>Endpoint Details</h2>
     <ul>
       <li>
-        <strong>GET /movies</strong><br />Returns all movies.<br />Params:
-        None<br />Response: Array of movies (title &amp; director)
+        <strong>GET /movies</strong><br />
+        Returns an array of all movies with full details.<br />
+        Params: None<br />
+        Response: Array of movie objects (title, description, genre, director,
+        imageURL)
       </li>
       <li>
-        <strong>GET /movies/:title</strong><br />Returns movie details by
-        title.<br />Params: <code>:title</code><br />Response: Movie title info
-        string
+        <strong>GET /movies/:title</strong><br />
+        Returns full details of a specific movie by title.<br />
+        Params: <code>:title</code><br />
+        Response: Movie object (title, description, genre, director, imageURL)
       </li>
       <li>
         <strong>GET /genres/:genreName</strong><br />Returns description of a

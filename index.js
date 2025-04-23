@@ -42,3 +42,23 @@ app.use((err, req, res, next) => {
   console.error(err.stack); // logs the error stack trace to terminal
   res.status(500).send("Something broke!");
 });
+
+// Return all movies
+app.get("/movies", (req, res) => {
+  res.send("Return a list of all movies");
+});
+
+// Return one movie by title
+app.get("/movies/:title", (req, res) => {
+  res.send(`Return data about movie: ${req.params.title}`);
+});
+
+// Return genre description by name
+app.get("/genres/:genreName", (req, res) => {
+  res.send(`Return description for genre: ${req.params.genreName}`);
+});
+
+// Return director info by name
+app.get("/directors/:directorName", (req, res) => {
+  res.send(`Return data about director: ${req.params.directorName}`);
+});

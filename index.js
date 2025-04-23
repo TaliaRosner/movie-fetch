@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const app = express();
 
 app.use(morgan("common")); // Logging all requests
+app.use(express.json()); // Parsing JSON request bodies
 app.use(express.static("public")); // Serving static files
 
 // Top 10 movies data
@@ -61,4 +62,10 @@ app.get("/genres/:genreName", (req, res) => {
 // Return director info by name
 app.get("/directors/:directorName", (req, res) => {
   res.send(`Return data about director: ${req.params.directorName}`);
+});
+
+// Register a new user
+app.post("/users", (req, res) => {
+  const newUser = req.body;
+  res.send(`User ${newUser.username} registered!`);
 });

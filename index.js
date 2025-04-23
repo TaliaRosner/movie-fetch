@@ -69,3 +69,31 @@ app.post("/users", (req, res) => {
   const newUser = req.body;
   res.send(`User ${newUser.username} registered!`);
 });
+
+// Update user info (e.g., username)
+app.put("/users/:username", (req, res) => {
+  const currentUsername = req.params.username;
+  const updatedUser = req.body;
+
+  res.send(
+    `User ${currentUsername} has been updated to ${updatedUser.username}`
+  );
+});
+
+// Add movie to user's favorites
+app.post("/users/:username/movies/:movieId", (req, res) => {
+  const { username, movieId } = req.params;
+  res.send(`Movie ${movieId} added to ${username}'s favorites`);
+});
+
+// Remove a movie from user's favorites
+app.delete("/users/:username/movies/:movieId", (req, res) => {
+  const { username, movieId } = req.params;
+  res.send(`Movie ${movieId} removed from ${username}'s favorites`);
+});
+
+// Deregister an existing user
+app.delete("/users/:username", (req, res) => {
+  const { username } = req.params;
+  res.send(`User ${username} has been deregistered`);
+});

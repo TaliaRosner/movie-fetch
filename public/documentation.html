@@ -10,6 +10,7 @@
       This API provides access to movie data. Use it to search, save, and
       explore films from your collection.
     </p>
+
     <h2>API Endpoints</h2>
     <table border="1" cellpadding="8" cellspacing="0">
       <thead>
@@ -19,53 +20,98 @@
           <th>Response</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>GET</td>
-          <td>/movies</td>
-          <td>Return a list of all movies</td>
-        </tr>
-        <tr>
-          <td>GET</td>
-          <td>/movies/:title</td>
-          <td>Return data about a single movie by title</td>
-        </tr>
-        <tr>
-          <td>GET</td>
-          <td>/genres/:genreName</td>
-          <td>Return description of a genre by name</td>
-        </tr>
-        <tr>
-          <td>GET</td>
-          <td>/directors/:directorName</td>
-          <td>Return data about a director by name</td>
-        </tr>
-        <tr>
-          <td>POST</td>
-          <td>/users</td>
-          <td>Register a new user</td>
-        </tr>
-        <tr>
-          <td>PUT</td>
-          <td>/users/:username</td>
-          <td>Update user info</td>
-        </tr>
-        <tr>
-          <td>POST</td>
-          <td>/users/:username/movies/:movieId</td>
-          <td>Add a movie to user’s favorites</td>
-        </tr>
-        <tr>
-          <td>DELETE</td>
-          <td>/users/:username/movies/:movieId</td>
-          <td>Remove a movie from user’s favorites</td>
-        </tr>
-        <tr>
-          <td>DELETE</td>
-          <td>/users/:username</td>
-          <td>Deregister an existing user</td>
-        </tr>
-      </tbody>
+      <tr>
+        <td>GET</td>
+        <td>/movies</td>
+        <td>Return a list of all movies</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/movies/:title</td>
+        <td>Return data about a single movie by title</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/genres/:genreName</td>
+        <td>Return description of a genre by name</td>
+      </tr>
+      <tr>
+        <td>GET</td>
+        <td>/directors/:directorName</td>
+        <td>Return data about a director by name</td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td>/users</td>
+        <td>Register a new user</td>
+      </tr>
+      <tr>
+        <td>PUT</td>
+        <td>/users/:username</td>
+        <td>Update user info</td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td>/users/:username/movies/:movieId</td>
+        <td>Add a movie to user's favorites</td>
+      </tr>
+      <tr>
+        <td>DELETE</td>
+        <td>/users/:username/movies/:movieId</td>
+        <td>Remove a movie from user's favorites</td>
+      </tr>
+      <tr>
+        <td>DELETE</td>
+        <td>/users/:username</td>
+        <td>Deregister an existing user</td>
+      </tr>
     </table>
+
+    <h2>Endpoint Details</h2>
+    <ul>
+      <li>
+        <strong>GET /movies</strong><br />Returns all movies.<br />Params:
+        None<br />Response: Array of movies (title & director)
+      </li>
+      <li>
+        <strong>GET /movies/:title</strong><br />Returns movie details by
+        title.<br />Params: <code>:title</code><br />Response: Movie title info
+        string
+      </li>
+      <li>
+        <strong>GET /genres/:genreName</strong><br />Returns description of a
+        genre.<br />Params: <code>:genreName</code><br />Response: Genre
+        description string
+      </li>
+      <li>
+        <strong>GET /directors/:directorName</strong><br />Returns director
+        information.<br />Params: <code>:directorName</code><br />Response:
+        Director info string
+      </li>
+      <li>
+        <strong>POST /users</strong><br />Registers a new user.<br />Body:
+        <code>{ "username": "sallydev" }</code><br />Response: User registered
+        confirmation string
+      </li>
+      <li>
+        <strong>PUT /users/:username</strong><br />Updates a user's username.<br />Params:
+        <code>:username</code><br />Body: <code>{ "username": "newName" }</code
+        ><br />Response: Update confirmation string
+      </li>
+      <li>
+        <strong>POST /users/:username/movies/:movieId</strong><br />Adds a
+        favorite movie.<br />Params: <code>:username</code>,
+        <code>:movieId</code><br />Response: Movie added confirmation string
+      </li>
+      <li>
+        <strong>DELETE /users/:username/movies/:movieId</strong><br />Removes a
+        movie from favorites.<br />Params: <code>:username</code>,
+        <code>:movieId</code><br />Response: Movie removed confirmation string
+      </li>
+      <li>
+        <strong>DELETE /users/:username</strong><br />Deregisters a user.<br />Params:
+        <code>:username</code><br />Response: Deregistration confirmation string
+      </li>
+    </ul>
   </body>
 </html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Movie Fetch API</title>
+  </head>
+  <body>
+    <h1>Movie Fetch</h1>
+    <p>
+      This API provides access to movie data. Use it to search, save, and
+      explore films from your collection.
+    </p>
+
+    <h2>API Endpoints</h2>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Request</th>
+          <th>URL</th>
+          <th>Response</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/movies</td>
+          <td>Returns list of all movies</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/movies/:title</td>
+          <td>Returns a movie by title</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/genres/:genreName</td>
+          <td>Returns genre object (name, description)</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/directors/:directorName</td>
+          <td>Returns director object (name, bio)</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>/users</td>
+          <td>Creates new user object</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/users</td>
+          <td>Returns list of all users</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/users/:username</td>
+          <td>Returns updated user object</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>/users/:username/movies/:movieId</td>
+          <td>Adds movie to user's favorites</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/users/:username/movies/:movieId</td>
+          <td>Removes movie from user's favorites</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/users/:username</td>
+          <td>Deletes user</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoint Details</h2>
+    <ul>
+      <li>
+        <strong>GET /movies</strong><br />
+        Response:
+        <code
+          >[{ Title, Description, Genre, Director, ImagePath, Featured }]</code
+        >
+      </li>
+      <li>
+        <strong>GET /movies/:title</strong><br />
+        Response:
+        <code
+          >{ Title, Description, Genre, Director, ImagePath, Featured }</code
+        >
+      </li>
+      <li>
+        <strong>GET /genres/:genreName</strong><br />
+        Response: <code>{ Name, Description }</code>
+      </li>
+      <li>
+        <strong>GET /directors/:directorName</strong><br />
+        Response: <code>{ Name, Bio }</code>
+      </li>
+      <li>
+        <strong>POST /users</strong><br />
+        Body:
+        <pre><code>{
+  "Username": "janedoe",
+  "Password": "12345",
+  "Email": "janedoe@example.com",
+  "Birthday": "1990-01-01"
+}</code></pre>
+        Response: Created user object
+      </li>
+      <li>
+        <strong>GET /users</strong><br />
+        Response: List of all registered users
+      </li>
+      <li>
+        <strong>PUT /users/:username</strong><br />
+        Body:
+        <pre><code>{
+  "Username": "newname",
+  "Password": "newpassword",
+  "Email": "newemail@example.com",
+  "Birthday": "1991-05-05"
+}</code></pre>
+        Response: Updated user object
+      </li>
+      <li>
+        <strong>POST /users/:username/movies/:movieId</strong><br />
+        Response: Updated user object with movie in FavoriteMovies array
+      </li>
+      <li>
+        <strong>DELETE /users/:username/movies/:movieId</strong><br />
+        Response: Updated user object with movie removed from FavoriteMovies
+      </li>
+      <li>
+        <strong>DELETE /users/:username</strong><br />
+        Response: Text confirmation
+        <code>"User [username] was deregistered."</code>
+      </li>
+    </ul>
+  </body>
+</html>

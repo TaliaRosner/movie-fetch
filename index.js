@@ -1,111 +1,49 @@
 // index.js
 const express = require("express");
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+const Models = require("./models.js");
+
 const app = express();
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect("mongodb://localhost:27017/moviefetch", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.use(morgan("common")); // Logging all requests
 app.use(express.json()); // Parsing JSON request bodies
 app.use(express.static("public")); // Serving static files
 
-// Movie data with full details (Bonus task: "in-memory" array)
-const movies = [
-  {
-    title: "The Shawshank Redemption",
-    description:
-      "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-    genre: "Drama",
-    director: "Frank Darabont",
-    imageURL: "https://example.com/shawshank.jpg",
-  },
-  {
-    title: "The Godfather",
-    description:
-      "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-    genre: "Crime",
-    director: "Francis Ford Coppola",
-    imageURL: "https://example.com/godfather.jpg",
-  },
-  {
-    title: "The Dark Knight",
-    description:
-      "Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-    genre: "Action",
-    director: "Christopher Nolan",
-    imageURL: "https://example.com/darkknight.jpg",
-  },
-  {
-    title: "Pulp Fiction",
-    description:
-      "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in tales of violence and redemption.",
-    genre: "Crime",
-    director: "Quentin Tarantino",
-    imageURL: "https://example.com/pulpfiction.jpg",
-  },
-  {
-    title: "Forrest Gump",
-    description:
-      "The story of Forrest Gump, a man with a low IQ, and the epic journey he takes through life.",
-    genre: "Drama",
-    director: "Robert Zemeckis",
-    imageURL: "https://example.com/forrestgump.jpg",
-  },
-  {
-    title: "Inception",
-    description:
-      "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea.",
-    genre: "Sci-Fi",
-    director: "Christopher Nolan",
-    imageURL: "https://example.com/inception.jpg",
-  },
-  {
-    title: "Fight Club",
-    description:
-      "An insomniac office worker and a devil-may-care soapmaker form an underground fight club.",
-    genre: "Drama",
-    director: "David Fincher",
-    imageURL: "https://example.com/fightclub.jpg",
-  },
-  {
-    title: "The Matrix",
-    description:
-      "A hacker learns from mysterious rebels about the true nature of his reality and his role in the war.",
-    genre: "Sci-Fi",
-    director: "The Wachowskis",
-    imageURL: "https://example.com/matrix.jpg",
-  },
-  {
-    title: "Goodfellas",
-    description:
-      "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.",
-    genre: "Crime",
-    director: "Martin Scorsese",
-    imageURL: "https://example.com/goodfellas.jpg",
-  },
-  {
-    title: "The Lord of the Rings: The Return of the King",
-    description:
-      "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam.",
-    genre: "Fantasy",
-    director: "Peter Jackson",
-    imageURL: "https://example.com/lotr.jpg",
-  },
-];
-
 // Route to return all movies
 app.get("/movies", (req, res) => {
-  res.json(movies);
+  Movies.find()
+    .then((movies) => {
+      res.status(200).json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Route to return one movie by title
 app.get("/movies/:title", (req, res) => {
-  const movie = movies.find(
-    (m) => m.title.toLowerCase() === req.params.title.toLowerCase()
-  );
-  if (movie) {
-    res.json(movie);
-  } else {
-    res.status(404).send("Movie not found");
-  }
+  Movies.findOne({ Title: req.params.title })
+    .then((movie) => {
+      if (movie) {
+        res.json(movie);
+      } else {
+        res.status(404).send("Movie not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Default route for the root URL
@@ -121,45 +59,150 @@ app.use((err, req, res, next) => {
 
 // Register a new user
 app.post("/users", (req, res) => {
-  const newUser = req.body;
-  res.send(`User ${newUser.username} registered!`);
+  Users.create(req.body)
+    .then((user) => res.status(201).json(user))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
-// Update user info (e.g., username)
+// Route to return all users
+app.get("/users", (req, res) => {
+  Users.find()
+    .then((users) => res.status(200).json(users))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
+
+// Update user info (e.g., username, password, email, birthday)
 app.put("/users/:username", (req, res) => {
-  const currentUsername = req.params.username;
-  const updatedUser = req.body;
-  res.send(
-    `User ${currentUsername} has been updated to ${updatedUser.username}`
-  );
+  Users.findOneAndUpdate(
+    { Username: req.params.username },
+    {
+      $set: {
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday,
+      },
+    },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+      res.status(200).json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
+
+// TEMP: Add a movie (for testing only)
+app.post("/movies", (req, res) => {
+  Movies.create(req.body)
+    .then((movie) => res.status(201).json(movie))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Add movie to user's favorites
 app.post("/users/:username/movies/:movieId", (req, res) => {
-  const { username, movieId } = req.params;
-  res.send(`Movie ${movieId} added to ${username}'s favorites`);
+  Users.findOneAndUpdate(
+    { Username: req.params.username },
+    {
+      $addToSet: {
+        FavoriteMovies: new mongoose.Types.ObjectId(req.params.movieId),
+      },
+    },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (updatedUser) {
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(404).send("User not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
-// Remove a movie from user's favorites
+// Remove a movie from user's favorites (with Mongoose)
 app.delete("/users/:username/movies/:movieId", (req, res) => {
-  const { username, movieId } = req.params;
-  res.send(`Movie ${movieId} removed from ${username}'s favorites`);
+  Users.findOneAndUpdate(
+    { Username: req.params.username },
+    { $pull: { FavoriteMovies: req.params.movieId } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (updatedUser) {
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(404).send("User not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
-// Deregister an existing user
+// Deregister an existing user (delete user document)
 app.delete("/users/:username", (req, res) => {
-  const { username } = req.params;
-  res.send(`User ${username} has been deregistered`);
+  Users.findOneAndDelete({ Username: req.params.username })
+    .then((deletedUser) => {
+      if (deletedUser) {
+        res.status(200).send(`User ${req.params.username} was deregistered.`);
+      } else {
+        res.status(404).send("User not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Return genre description by name
 app.get("/genres/:genreName", (req, res) => {
-  res.send(`Return description for genre: ${req.params.genreName}`);
+  Movies.findOne({ "Genre.Name": req.params.genreName })
+    .then((movie) => {
+      if (movie) {
+        res.json(movie.Genre);
+      } else {
+        res.status(404).send("Genre not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Return director info by name
 app.get("/directors/:directorName", (req, res) => {
-  res.send(`Return data about director: ${req.params.directorName}`);
+  Movies.findOne({ "Director.Name": req.params.directorName })
+    .then((movie) => {
+      if (movie) {
+        res.json(movie.Director);
+      } else {
+        res.status(404).send("Director not found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 // Start server

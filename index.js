@@ -11,10 +11,13 @@ const app = express();
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect("mongodb://localhost:27017/moviefetch", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoose = require("mongoose");
+
+const uri = process.env.MONGODB_URI;
+mongoose
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Connected to MongoDB Atlas."))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use(morgan("common")); // Logging all requests
 app.use(express.json()); // Parsing JSON request bodies

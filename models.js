@@ -1,4 +1,3 @@
-// models.js
 const mongoose = require("mongoose");
 
 let movieSchema = new mongoose.Schema({
@@ -11,6 +10,8 @@ let movieSchema = new mongoose.Schema({
   Director: {
     Name: String,
     Bio: String,
+    BirthYear: Number,
+    DeathYear: Number,
   },
   Actors: [String],
   ImagePath: String,

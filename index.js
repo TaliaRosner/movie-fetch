@@ -43,20 +43,24 @@ app.get(
 );
 
 // Route to return one movie by title
-app.get("/movies/:title", (req, res) => {
-  Movies.findOne({ Title: req.params.title })
-    .then((movie) => {
-      if (movie) {
-        res.json(movie);
-      } else {
-        res.status(404).send("Movie not found");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error: " + err);
-    });
-});
+app.get(
+  "/movies/:title",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Movies.findOne({ Title: req.params.title })
+      .then((movie) => {
+        if (movie) {
+          res.json(movie);
+        } else {
+          res.status(404).send("Movie not found");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
 
 // Default route for the root URL
 app.get("/", (req, res) => {
@@ -268,36 +272,44 @@ app.delete(
 );
 
 // Return genre description by name
-app.get("/genres/:genreName", (req, res) => {
-  Movies.findOne({ "Genre.Name": req.params.genreName })
-    .then((movie) => {
-      if (movie) {
-        res.json(movie.Genre);
-      } else {
-        res.status(404).send("Genre not found");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error: " + err);
-    });
-});
+app.get(
+  "/genres/:genreName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Movies.findOne({ "Genre.Name": req.params.genreName })
+      .then((movie) => {
+        if (movie) {
+          res.json(movie.Genre);
+        } else {
+          res.status(404).send("Genre not found");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
 
 // Return director info by name
-app.get("/directors/:directorName", (req, res) => {
-  Movies.findOne({ "Director.Name": req.params.directorName })
-    .then((movie) => {
-      if (movie) {
-        res.json(movie.Director);
-      } else {
-        res.status(404).send("Director not found");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error: " + err);
-    });
-});
+app.get(
+  "/directors/:directorName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Movies.findOne({ "Director.Name": req.params.directorName })
+      .then((movie) => {
+        if (movie) {
+          res.json(movie.Director);
+        } else {
+          res.status(404).send("Director not found");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
 
 // Start server
 app.listen(8080, () => {

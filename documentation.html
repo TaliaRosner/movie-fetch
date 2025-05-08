@@ -17,7 +17,7 @@
         <tr>
           <th>Request</th>
           <th>URL</th>
-          <th>Response</th>
+          <th>Description</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +29,10 @@
         <tr>
           <td>GET</td>
           <td>/movies/:title</td>
-          <td>Returns a movie by title</td>
+          <td>
+            Returns a single movie object with title, description, genre,
+            director, etc.
+          </td>
         </tr>
         <tr>
           <td>GET</td>
@@ -39,12 +42,21 @@
         <tr>
           <td>GET</td>
           <td>/directors/:directorName</td>
-          <td>Returns director object (name, bio)</td>
+          <td>Returns director's bio, birth year, and death year</td>
         </tr>
         <tr>
           <td>POST</td>
           <td>/users</td>
-          <td>Creates new user object</td>
+          <td>
+            Creates new user object.<br />
+            Example request:<br />
+            <code
+              >{ "Username": "JaneDoe",<br />
+              "Password": "password123",<br />
+              "Email": "jane@example.com",<br />
+              "Birthday": "1990-01-01" }</code
+            >
+          </td>
         </tr>
         <tr>
           <td>GET</td>
@@ -54,7 +66,16 @@
         <tr>
           <td>PUT</td>
           <td>/users/:username</td>
-          <td>Returns updated user object</td>
+          <td>
+            Updates user info.<br />
+            Example request:<br />
+            <code
+              >{ "Username": "JaneDoe",<br />
+              "Password": "newpass456",<br />
+              "Email": "jane@newmail.com",<br />
+              "Birthday": "1990-01-01" }</code
+            >
+          </td>
         </tr>
         <tr>
           <td>POST</td>
@@ -80,14 +101,22 @@
         <strong>GET /movies</strong><br />
         Response:
         <code
-          >[{ Title, Description, Genre, Director, ImagePath, Featured }]</code
+          >[ { Title: "Jaws", Description: "A thriller about a shark", Genre: {
+          Name: "Thriller", Description: "Exciting, suspenseful..." }, Director:
+          { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
+          American film director...", BirthYear: 1946, DeathYear: null },
+          ImagePath: "url_to_image", Featured: true } ]</code
         >
       </li>
       <li>
         <strong>GET /movies/:title</strong><br />
         Response:
         <code
-          >{ Title, Description, Genre, Director, ImagePath, Featured }</code
+          >[ { Title: "Jaws", Description: "A thriller about a shark", Genre: {
+          Name: "Thriller", Description: "Exciting, suspenseful..." }, Director:
+          { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
+          American film director...", BirthYear: 1946, DeathYear: null },
+          ImagePath: "url_to_image", Featured: true } ]</code
         >
       </li>
       <li>
@@ -96,7 +125,11 @@
       </li>
       <li>
         <strong>GET /directors/:directorName</strong><br />
-        Response: <code>{ Name, Bio }</code>
+        Response:
+        <code>
+          { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
+          American film director...", BirthYear: 1946, DeathYear: null }
+        </code>
       </li>
       <li>
         <strong>POST /users</strong><br />
@@ -111,7 +144,15 @@
       </li>
       <li>
         <strong>GET /users</strong><br />
-        Response: List of all registered users
+        Response:
+        <pre><code>[
+  {
+    "Username": "janedoe",
+    "Email": "janedoe@example.com",
+    "Birthday": "1990-01-01T00:00:00.000Z",
+    "FavoriteMovies": []
+  }
+]</code></pre>
       </li>
       <li>
         <strong>PUT /users/:username</strong><br />
@@ -126,16 +167,28 @@
       </li>
       <li>
         <strong>POST /users/:username/movies/:movieId</strong><br />
-        Response: Updated user object with movie in FavoriteMovies array
+        Response:
+        <pre><code>{
+        "Username": "janedoe",
+        "Email": "janedoe@example.com",
+        "Birthday": "1990-01-01T00:00:00.000Z",
+        "FavoriteMovies": ["60f6b893c25e4c1a8f1a3d12"]
+      }</code></pre>
       </li>
       <li>
         <strong>DELETE /users/:username/movies/:movieId</strong><br />
-        Response: Updated user object with movie removed from FavoriteMovies
+        Response:
+        <pre><code>{
+        "Username": "janedoe",
+        "Email": "janedoe@example.com",
+        "Birthday": "1990-01-01T00:00:00.000Z",
+        "FavoriteMovies": []
+      }</code></pre>
       </li>
       <li>
         <strong>DELETE /users/:username</strong><br />
-        Response: Text confirmation
-        <code>"User [username] was deregistered."</code>
+        Response:
+        <pre><code>{ "message": "User janedoe was deregistered." }</code></pre>
       </li>
     </ul>
   </body>

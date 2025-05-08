@@ -25,7 +25,7 @@ passport.use(
           }
 
           // Add this plain password check
-          if (user.Password !== password) {
+          if (!user.validatePassword(password)) {
             return callback(null, false, {
               message: "Incorrect password",
             });

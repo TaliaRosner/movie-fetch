@@ -1,4 +1,3 @@
-// index.js
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
@@ -107,6 +106,35 @@ app.put("/users/:username", (req, res) => {
 app.post("/movies", (req, res) => {
   Movies.create(req.body)
     .then((movie) => res.status(201).json(movie))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
+
+// Update a movie by title
+app.put("/movies/:title", (req, res) => {
+  Movies.findOneAndUpdate(
+    { Title: req.params.title },
+    {
+      $set: {
+        Title: req.body.Title,
+        Description: req.body.Description,
+        Genre: req.body.Genre,
+        Director: req.body.Director,
+        Actors: req.body.Actors,
+        ImagePath: req.body.ImagePath,
+        Featured: req.body.Featured,
+      },
+    },
+    { new: true }
+  )
+    .then((updatedMovie) => {
+      if (!updatedMovie) {
+        return res.status(404).send("Movie not found");
+      }
+      res.status(200).json(updatedMovie);
+    })
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error: " + err);

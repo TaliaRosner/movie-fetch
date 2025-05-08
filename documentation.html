@@ -17,7 +17,7 @@
         <tr>
           <th>Request</th>
           <th>URL</th>
-          <th>Response</th>
+          <th>Description</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +29,10 @@
         <tr>
           <td>GET</td>
           <td>/movies/:title</td>
-          <td>Returns a movie by title</td>
+          <td>
+            Returns a single movie object with title, description, genre,
+            director, etc.
+          </td>
         </tr>
         <tr>
           <td>GET</td>
@@ -39,12 +42,21 @@
         <tr>
           <td>GET</td>
           <td>/directors/:directorName</td>
-          <td>Returns director object (name, bio)</td>
+          <td>Returns director's bio, birth year, and death year</td>
         </tr>
         <tr>
           <td>POST</td>
           <td>/users</td>
-          <td>Creates new user object</td>
+          <td>
+            Creates new user object.<br />
+            Example request:<br />
+            <code
+              >{ "Username": "JaneDoe",<br />
+              "Password": "password123",<br />
+              "Email": "jane@example.com",<br />
+              "Birthday": "1990-01-01" }</code
+            >
+          </td>
         </tr>
         <tr>
           <td>GET</td>
@@ -54,7 +66,16 @@
         <tr>
           <td>PUT</td>
           <td>/users/:username</td>
-          <td>Returns updated user object</td>
+          <td>
+            Updates user info.<br />
+            Example request:<br />
+            <code
+              >{ "Username": "JaneDoe",<br />
+              "Password": "newpass456",<br />
+              "Email": "jane@newmail.com",<br />
+              "Birthday": "1990-01-01" }</code
+            >
+          </td>
         </tr>
         <tr>
           <td>POST</td>

@@ -22,9 +22,10 @@ app.use(morgan("common")); // Logging all requests
 app.use(express.json()); // Parsing JSON request bodies
 app.use(express.static("public")); // Serving static files
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
 
+app.use(cors()); // Allow all origins
 let auth = require("./auth")(app);
+
 const passport = require("passport");
 require("./passport"); // Importing passport strategies
 

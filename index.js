@@ -153,33 +153,55 @@ app.get(
 // Update user info (e.g., username, password, email, birthday)
 app.put(
   "/users/:username",
+  [
+    check("Username", "Username must be at least 5 characters").isLength({
+      min: 5,
+    }),
+    check(
+      "Username",
+      "Username contains non-alphanumeric characters - not allowed"
+    ).isAlphanumeric(),
+    check("Password", "Password must be at least 8 characters").isLength({
+      min: 8,
+    }),
+    check("Email", "Email does not appear to be valid").isEmail(),
+  ],
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {
+  async (req, res) => {
     if (req.user.Username !== req.params.username) {
       return res.status(400).send("Permission denied");
     }
-    Users.findOneAndUpdate(
-      { Username: req.params.username },
-      {
-        $set: {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    const hashedPassword = Users.hashPassword(req.body.Password);
+
+    try {
+      const updatedUser = await Users.findOneAndUpdate(
+        { Username: req.params.username },
+        {
+          $set: {
+            Username: req.body.Username,
+            Password: hashedPassword,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday,
+          },
         },
-      },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        if (!updatedUser) {
-          return res.status(404).send("User not found");
-        }
-        res.status(200).json(updatedUser);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 

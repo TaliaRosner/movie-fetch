@@ -100,24 +100,24 @@
       <li>
         <strong>GET /movies</strong><br />
         Response:
-        <code
-          >[ { Title: "Jaws", Description: "A thriller about a shark", Genre: {
+        <code>
+          { Title: "Jaws", Description: "A thriller about a shark", Genre: {
           Name: "Thriller", Description: "Exciting, suspenseful..." }, Director:
           { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
           American film director...", BirthYear: 1946, DeathYear: null },
-          ImagePath: "url_to_image", Featured: true } ]</code
-        >
+          ImagePath: "url_to_image", Featured: true }
+        </code>
       </li>
       <li>
         <strong>GET /movies/:title</strong><br />
         Response:
-        <code
-          >[ { Title: "Jaws", Description: "A thriller about a shark", Genre: {
+        <code>
+          { Title: "Jaws", Description: "A thriller about a shark", Genre: {
           Name: "Thriller", Description: "Exciting, suspenseful..." }, Director:
           { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
           American film director...", BirthYear: 1946, DeathYear: null },
-          ImagePath: "url_to_image", Featured: true } ]</code
-        >
+          ImagePath: "url_to_image", Featured: true }
+        </code>
       </li>
       <li>
         <strong>GET /genres/:genreName</strong><br />
@@ -188,7 +188,7 @@
       <li>
         <strong>DELETE /users/:username</strong><br />
         Response:
-        <pre><code>{ "message": "User janedoe was deregistered." }</code></pre>
+        <pre><code>"User janedoe was deregistered."</code></pre>
       </li>
     </ul>
   </body>

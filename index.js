@@ -1,4 +1,5 @@
 require("dotenv").config();
+console.log("MONGODB_URI value is:", process.env.MONGODB_URI);
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
@@ -15,8 +16,17 @@ const Users = Models.User;
 const uri = process.env.MONGODB_URI;
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB Atlas."))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => {
+    console.log("Connected to MongoDB Atlas.");
+
+    const port = process.env.PORT || 8080;
+    app.listen(port, () => {
+      console.log(`App is running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
 app.use(morgan("common")); // Logging all requests
 app.use(express.json()); // Parsing JSON request bodies
@@ -335,10 +345,3 @@ app.get(
       });
   }
 );
-
-// Start server
-const port = process.env.PORT || 8080;
-
-app.listen(port, () => {
-  console.log(`App is running on port ${port}`);
-});

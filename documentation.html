@@ -48,13 +48,9 @@
           <td>POST</td>
           <td>/users</td>
           <td>
-            Creates new user object.<br />
-            Example request:<br />
-            <code
-              >{ "Username": "JaneDoe",<br />
-              "Password": "password123",<br />
-              "Email": "jane@example.com",<br />
-              "Birthday": "1990-01-01" }</code
+            Creates new user object.<br />Example request:<br /><code
+              >{ "Username": "JaneDoe",<br />"Password": "password123",<br />"Email":
+              "jane@example.com",<br />"Birthday": "1990-01-01" }</code
             >
           </td>
         </tr>
@@ -67,13 +63,9 @@
           <td>PUT</td>
           <td>/users/:username</td>
           <td>
-            Updates user info.<br />
-            Example request:<br />
-            <code
-              >{ "Username": "JaneDoe",<br />
-              "Password": "newpass456",<br />
-              "Email": "jane@newmail.com",<br />
-              "Birthday": "1990-01-01" }</code
+            Updates user info.<br />Example request:<br /><code
+              >{ "Username": "JaneDoe",<br />"Password": "newpass456",<br />"Email":
+              "jane@newmail.com",<br />"Birthday": "1990-01-01" }</code
             >
           </td>
         </tr>
@@ -126,10 +118,10 @@
       <li>
         <strong>GET /directors/:directorName</strong><br />
         Response:
-        <code>
-          { Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
-          American film director...", BirthYear: 1946, DeathYear: null }
-        </code>
+        <code
+          >{ Name: "Steven Spielberg", Bio: "Steven Allan Spielberg is an
+          American film director...", BirthYear: 1946, DeathYear: null }</code
+        >
       </li>
       <li>
         <strong>POST /users</strong><br />
@@ -140,7 +132,13 @@
   "Email": "janedoe@example.com",
   "Birthday": "1990-01-01"
 }</code></pre>
-        Response: Created user object
+        Response:
+        <pre><code>{
+  "Username": "janedoe",
+  "Email": "janedoe@example.com",
+  "Birthday": "1990-01-01T00:00:00.000Z",
+  "FavoriteMovies": []
+}</code></pre>
       </li>
       <li>
         <strong>GET /users</strong><br />
@@ -163,27 +161,33 @@
   "Email": "newemail@example.com",
   "Birthday": "1991-05-05"
 }</code></pre>
-        Response: Updated user object
+        Response:
+        <pre><code>{
+  "Username": "newname",
+  "Email": "newemail@example.com",
+  "Birthday": "1991-05-05T00:00:00.000Z",
+  "FavoriteMovies": []
+}</code></pre>
       </li>
       <li>
         <strong>POST /users/:username/movies/:movieId</strong><br />
         Response:
         <pre><code>{
-        "Username": "janedoe",
-        "Email": "janedoe@example.com",
-        "Birthday": "1990-01-01T00:00:00.000Z",
-        "FavoriteMovies": ["60f6b893c25e4c1a8f1a3d12"]
-      }</code></pre>
+  "Username": "janedoe",
+  "Email": "janedoe@example.com",
+  "Birthday": "1990-01-01T00:00:00.000Z",
+  "FavoriteMovies": ["60f6b893c25e4c1a8f1a3d12"]
+}</code></pre>
       </li>
       <li>
         <strong>DELETE /users/:username/movies/:movieId</strong><br />
         Response:
         <pre><code>{
-        "Username": "janedoe",
-        "Email": "janedoe@example.com",
-        "Birthday": "1990-01-01T00:00:00.000Z",
-        "FavoriteMovies": []
-      }</code></pre>
+  "Username": "janedoe",
+  "Email": "janedoe@example.com",
+  "Birthday": "1990-01-01T00:00:00.000Z",
+  "FavoriteMovies": []
+}</code></pre>
       </li>
       <li>
         <strong>DELETE /users/:username</strong><br />

@@ -14,7 +14,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose
-  .connect(process.env.CONNECTION_URI, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -40,6 +40,7 @@ let auth = require("./auth")(app);
 
 const passport = require("passport");
 require("./passport"); // Importing passport strategies
+app.use(passport.initialize()); // Needed to activate Passport middleware
 
 // Route to return all movies
 app.get(
@@ -166,21 +167,18 @@ app.get(
 app.put(
   "/users/:username",
   [
-    check("Username", "Username must be at least 5 characters").isLength({
-      min: 5,
-    }),
-    check(
-      "Username",
-      "Username contains non-alphanumeric characters - not allowed"
-    ).isAlphanumeric(),
-    check("Password", "Password is required").notEmpty(),
-    check("Password", "Password must be at least 8 characters").isLength({
-      min: 8,
-    }),
-    check("Email", "Email does not appear to be valid").isEmail(),
+    check("Username").optional().isLength({ min: 5 }),
+    check("Username").optional().isAlphanumeric(),
+    check("Password").optional().isLength({ min: 8 }),
+    check("Email").optional().isEmail(),
   ],
   passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    console.log("Authenticated user from JWT:", req.user);
+    next();
+  },
   async (req, res) => {
+    console.log("req.user:", req.user);
     if (req.user.Username !== req.params.username) {
       return res.status(400).send("Permission denied");
     }
@@ -190,7 +188,10 @@ app.put(
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const hashedPassword = Users.hashPassword(req.body.Password);
+    let hashedPassword;
+    if (req.body.Password) {
+      hashedPassword = Users.hashPassword(req.body.Password);
+    }
 
     try {
       const updatedUser = await Users.findOneAndUpdate(
@@ -210,10 +211,10 @@ app.put(
         return res.status(404).send("User not found");
       }
 
-      res.status(200).json(updatedUser);
+      return res.status(200).json(updatedUser);
     } catch (err) {
       console.error(err);
-      res.status(500).send("Error: " + err);
+      return res.status(500).send("Error: " + err);
     }
   }
 );

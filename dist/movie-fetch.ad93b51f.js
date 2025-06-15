@@ -18478,6 +18478,7 @@ const MainView = ()=>{
 };
 _s(MainView, "C32YjBS+WrPzSxLUCHbZDWJ+UPc=");
 _c = MainView;
+exports.default = MainView;
 var _c;
 $RefreshReg$(_c, "MainView");
 
